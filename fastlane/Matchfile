@@ -1,0 +1,7 @@
+git_url ENV["MATCH_GIT_URL"]
+
+app_identifier ENV["FABRIC_BUNDLE_IDENTIFIER"]
+username ENV["FABRIC_DEVELOPER_EMAIL"] # Your Apple Developer Portal username
+
+# For all available options run `fastlane match --help`
+# Remove the # in the beginning of the line to enable the other options

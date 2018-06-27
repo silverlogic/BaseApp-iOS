@@ -1,0 +1,265 @@
+# Customise this file, documentation can be found here:
+# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
+# All available actions: https://docs.fastlane.tools/actions
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "2.69.2"
+
+default_platform :ios
+
+# Temporary helper function for making project use manual code signing and force which bundle identifier to
+# use until Fastlane comes out with a temporary fix
+def change_settings_manually(bundle_identifier, target_name)
+  project = Xcodeproj::Project.open('../BaseApp.xcodeproj')
+  filtered_targets = project.targets.select do |elem|
+    elem.name == target_name
+  end
+  main_app_target = filtered_targets.first
+  main_app_target.build_configurations.each do |config|
+    config.build_settings['CODE_SIGN_STYLE'] = "Manual"
+    config.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = bundle_identifier
+  end
+  project.save
+end
+
+platform :ios do
+
+  # Called before requested lane runs
+  before_all do
+    ENV["SLACK_URL"] = ENV["SLACK_HOOK"]
+  end
+
+  # Avaliable Lanes
+  desc "Deploy Staging Build To Fabric"
+  lane :fabric do |options|
+
+    # Install dependencies
+    cocoapods
+
+    # Read in values set from .env file
+    application_name = ENV["APPLICATION_NAME"]
+    application_scheme = ENV["APPLICATION_SCHEME_NAME_STAGING"]
+    fabric_developer_email = ENV["FABRIC_DEVELOPER_EMAIL"]
+    fabric_developer_team_id = ENV["FABRIC_DEVELOPER_TEAM_ID"]
+    fabric_bundle_identifier = ENV["FABRIC_BUNDLE_IDENTIFIER"]
+    fabric_api_token = ENV["FABRIC_API_TOKEN"]
+    fabric_build_secret = ENV["FABRIC_BUILD_SECRET"]
+
+    # Create the application on Apple Developer Portal
+    produce(
+      username: fabric_developer_email,
+      app_identifier: fabric_bundle_identifier,
+      app_name: application_name,
+      team_id: fabric_developer_team_id,
+      skip_itc: true
+    )
+
+    # Load provisioning profiles and certificates
+    match(
+      app_identifier: fabric_bundle_identifier,
+      username: fabric_developer_email,
+      readonly: true,
+      team_id: fabric_developer_team_id,
+      type: "adhoc"
+    )
+
+    # Disable automatic code signing
+    disable_automatic_code_signing(
+      path: "BaseApp.xcodeproj",
+      team_id: fabric_developer_team_id
+    )
+    change_settings_manually(fabric_bundle_identifier, application_scheme)
+
+    # Generate archive
+    specifier = "sigh_#{fabric_bundle_identifier}_adhoc"
+    provisioning_profile_specifier = ENV[specifier]
+    gym(
+      scheme: application_scheme,
+      export_method: "ad-hoc",
+      export_team_id: fabric_developer_team_id,
+      xcargs: "PROVISIONING_PROFILE_SPECIFIER=#{provisioning_profile_specifier}",
+      skip_profile_detection: true
+    )
+
+    # Get release notes
+    release_notes = sh "cd .. && ./../../Scripts/get_latest_release_notes.sh"
+    
+    # Upload to Fabric
+    crashlytics(
+      api_token: fabric_api_token,
+      build_secret: fabric_build_secret,
+      notes: release_notes,
+      groups: [ENV["FABRIC_CLIENT_GROUP_ALIAS"]]
+    )
+  end
+
+  desc "Deploy Production Build To iTunes Connect"
+  lane :itunes_connect do
+
+    # Install dependencies
+    cocoapods
+
+    # Read in values set from .env file
+    application_name = ENV["APPLICATION_NAME"]
+    application_scheme = ENV["APPLICATION_SCHEME_NAME_PRODUCTION"]
+    appstore_developer_email = ENV["APPSTORE_DEVELOPER_EMAIL"]
+    appstore_developer_team_id = ENV["APPSTORE_DEVELOPER_TEAM_ID"]
+    appstore_bundle_identifier = ENV["APPSTORE_BUNDLE_IDENTIFIER"]
+    appstore_production_branch = ENV["APPSTORE_PRODUCTION_BRANCH"]
+
+    # Create the application on iTunes Connect and Apple Developer Portal
+    produce(
+      username: appstore_developer_email,
+      app_identifier: appstore_bundle_identifier,
+      app_name: application_name,
+      team_id: appstore_developer_team_id
+    )
+
+    # Load provisioning profiles and certificates
+    match(
+      git_branch: appstore_production_branch,
+      app_identifier: appstore_bundle_identifier,
+      username: appstore_developer_email,
+      readonly: true,
+      team_id: appstore_developer_team_id,
+      type: "appstore"
+    )
+
+    # Disable automatic code signing
+    disable_automatic_code_signing(
+      path: "BaseApp.xcodeproj",
+      team_id: appstore_developer_team_id
+    )
+    change_settings_manually(appstore_bundle_identifier, application_scheme)
+
+    # Generate screenshots
+    # UITest will need to change for screenshots the client wants
+    # snapshot(scheme: "BaseAppV2UITests")
+
+    # Generate archive
+    specifier = "sigh_#{appstore_bundle_identifier}_appstore"
+    provisioning_profile_specifier = ENV[specifier]
+    gym(
+      scheme: application_scheme,
+      export_method: "app-store",
+      export_team_id: appstore_developer_team_id,
+      xcargs: "PROVISIONING_PROFILE_SPECIFIER=#{provisioning_profile_specifier}",
+      skip_profile_detection: true
+    )
+
+    # Send to iTunes Connect and submit for review
+    deliver(
+      username: appstore_developer_email,
+      app_identifier: appstore_bundle_identifier,
+      team_id: appstore_developer_team_id,
+      submit_for_review: false
+    )
+  end
+
+  desc "Update current provisioning profile with test devices"
+  lane :update_test_devices do
+
+    # Read in values set from .env file
+    fabric_developer_email = ENV["FABRIC_DEVELOPER_EMAIL"]
+    fabric_bundle_identifier = ENV["FABRIC_BUNDLE_IDENTIFIER"]
+    fabric_developer_team_id = ENV["FABRIC_DEVELOPER_TEAM_ID"]
+
+    # Register devices for the provisiong profile to use
+    register_devices(devices_file: "fastlane/devices.txt")
+
+    # Update the provisioning profile
+    match(
+      app_identifier: fabric_bundle_identifier,
+      username: fabric_developer_email,
+      force_for_new_devices: true,
+      team_id: fabric_developer_team_id,
+      type: "adhoc"
+    )
+  end
+
+  desc "Generate adhoc provisioning profile for Fabric builds"
+  lane :generate_fabric_profile do
+
+    # Read in values set from .env file
+    application_name = ENV["APPLICATION_NAME"]
+    fabric_developer_email = ENV["FABRIC_DEVELOPER_EMAIL"]
+    fabric_developer_team_id = ENV["FABRIC_DEVELOPER_TEAM_ID"]
+    fabric_bundle_identifier = ENV["FABRIC_BUNDLE_IDENTIFIER"]
+
+    # Create the application on Apple Developer Portal
+    produce(
+      username: fabric_developer_email,
+      app_identifier: fabric_bundle_identifier,
+      app_name: application_name,
+      team_id: fabric_developer_team_id,
+      skip_itc: true
+    )
+
+    # Create provisioning profiles and certificates
+    match(
+      app_identifier: fabric_bundle_identifier,
+      username: fabric_developer_email,
+      team_id: fabric_developer_team_id,
+      type: "adhoc"
+    )
+
+  end
+
+  desc "Generate appstore provisioning profile for AppStore builds"
+  lane :generate_appstore_profile do
+
+    # Read in values set from .env file
+    application_name = ENV["APPLICATION_NAME"]
+    appstore_developer_email = ENV["APPSTORE_DEVELOPER_EMAIL"]
+    appstore_developer_team_id = ENV["APPSTORE_DEVELOPER_TEAM_ID"]
+    appstore_bundle_identifier = ENV["APPSTORE_BUNDLE_IDENTIFIER"]
+    appstore_production_branch = ENV["APPSTORE_PRODUCTION_BRANCH"]
+
+    # Create the application on iTunes Connect and Apple Developer Portal
+    produce(
+      username: appstore_developer_email,
+      app_identifier: appstore_bundle_identifier,
+      app_name: application_name,
+      team_id: appstore_developer_team_id
+    )
+
+    # Generate provisioning profiles and certificates
+    match(
+      git_branch: appstore_production_branch,
+      app_identifier: appstore_bundle_identifier,
+      username: appstore_developer_email,
+      team_id: appstore_developer_team_id,
+      type: "appstore"
+    )
+  end
+
+  # Called if requested lane runs successfully
+  after_all do |lane|
+    clean_build_artifacts
+    if lane == :fabric
+      slack(message: "Successfully deployed to Fabric! 🎉")
+    elsif lane == :update_test_devices
+      slack(message: "Successfully updated provisiong profile with test devices! 🎉")
+    elsif lane == :itunes_connect
+      slack(message: "Successfully deployed to iTunes Connect! 🎉")
+    elsif lane == :generate_fabric_profile
+      slack(message: "Successfully generated provisioning profile for Fabric! 🎉")
+    else
+      slack(message: "Successfully generated provisioning profile for AppStore! 🎉")
+    end
+  end
+
+  # Called if requested lane failed
+  error do |lane, exception|
+    clean_build_artifacts
+    slack(message: exception.message, success: false)
+  end
+end

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ExamplePopupViewController" customModule="BaseAppV2" customModuleProvider="target">
+            <connections>
+                <outlet property="view" destination="zb1-W3-4k0" id="gpI-uC-Kn8"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="zb1-W3-4k0">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="236"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8gv-79-yfn" customClass="BaseButton" customModule="BaseAppV2" customModuleProvider="target">
+                    <rect key="frame" x="37" y="119.5" width="302" height="52"/>
+                    <color key="backgroundColor" red="0.23921568630000001" green="0.55294117649999996" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <state key="normal" title="Dismiss">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="3"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <variation key="heightClass=regular-widthClass=regular">
+                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                    </variation>
+                    <connections>
+                        <action selector="dismissButtonTapped:" destination="-1" eventType="touchUpInside" id="c1d-5o-U5y"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is an example popup" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Adg-SO-HAe">
+                    <rect key="frame" x="37" y="56.5" width="302" height="52"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                    <color key="textColor" red="0.23921568630000001" green="0.55294117649999996" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                    <variation key="heightClass=regular-widthClass=regular">
+                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                    </variation>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="8gv-79-yfn" firstAttribute="leading" secondItem="zb1-W3-4k0" secondAttribute="leadingMargin" constant="29" id="2IM-ky-ETF"/>
+                <constraint firstItem="Adg-SO-HAe" firstAttribute="leading" secondItem="zb1-W3-4k0" secondAttribute="leadingMargin" constant="29" id="3LP-ml-Yvo"/>
+                <constraint firstAttribute="trailingMargin" secondItem="8gv-79-yfn" secondAttribute="trailing" constant="28" id="UZn-n9-jt1"/>
+                <constraint firstItem="8gv-79-yfn" firstAttribute="top" secondItem="Adg-SO-HAe" secondAttribute="bottom" constant="11" id="Y2P-AF-m3U"/>
+                <constraint firstItem="Adg-SO-HAe" firstAttribute="centerY" secondItem="zb1-W3-4k0" secondAttribute="centerY" multiplier="0.7" id="hMo-Ek-LWp"/>
+                <constraint firstItem="Adg-SO-HAe" firstAttribute="height" secondItem="zb1-W3-4k0" secondAttribute="height" multiplier="0.22" id="jFQ-kP-eST"/>
+                <constraint firstAttribute="trailingMargin" secondItem="Adg-SO-HAe" secondAttribute="trailing" constant="28" id="oi2-QQ-aM7"/>
+                <constraint firstItem="8gv-79-yfn" firstAttribute="height" secondItem="zb1-W3-4k0" secondAttribute="height" multiplier="0.22" id="vRh-0q-a1s"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="27.5" y="-274"/>
+        </view>
+    </objects>
+</document>

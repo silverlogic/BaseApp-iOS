@@ -1,0 +1,14 @@
+{
+    "id": 210,
+    "email": "testuser@tsl.io",
+    "is_email_verified": false,
+    "new_email": "",
+    "is_new_email_confirmed": false,
+    "referral_code": "PzpR",
+    "avatar": {
+        "small": "https://www.gravatar.com/avatar/5c5ef196b914500f7ed2d96da0151910/?d=retro&s=64",
+        "full_size": "https://www.gravatar.com/avatar/5c5ef196b914500f7ed2d96da0151910/?d=retro&s=1024"
+    },
+    "first_name": "Bob",
+    "last_name": "Saget"
+}

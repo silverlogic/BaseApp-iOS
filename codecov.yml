@@ -1,0 +1,18 @@
+ignore:
+  - "Pods/*"
+  - "fastlane/*"
+  - "bitrise.yml"
+  - "get_latest_release_notes.sh"
+  - "UnitTests/*"
+  - "UITests/*"
+  - "IntegrationTests/*"
+  - "CONTRIBUTING.md"
+  - "PULL_REQUEST_TEMPLATE.md"
+
+comment:
+  layout: "header, diff, changes"
+  behavior: default
+  require_changes: false
+  require_base: no
+  require_head: yes
+  branches: null

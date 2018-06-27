@@ -1,0 +1,197 @@
+---
+format_version: 1.3.1
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+workflows:
+  feature:
+    steps:
+    - activate-ssh-key:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone: {}
+    - cache-pull: {}
+    - cocoapods-install: {}
+    - xcode-test:
+        inputs:
+        - scheme: Development
+        - simulator_device: iPhone 6
+        - output_tool: xcodebuild
+        - xcodebuild_test_options: "-enableCodeCoverage YES"
+        - should_build_before_test: 'no'
+    - codecov:
+        inputs:
+        - CODECOV_TOKEN: bccfa85f-ffdf-404d-a793-27a28e4c8c98
+        - other_options: -X xcodeplist -g "Pods/"
+    - deploy-to-bitrise-io:
+        inputs:
+        - notify_user_groups: none
+        - notify_email_list: ''
+    - cache-push:
+        inputs:
+        - cache_paths: "./Pods -> ./Podfile.lock"
+    - slack:
+        inputs:
+        - webhook_url: https://hooks.slack.com/services/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
+        - channel: "#ba-ios-v3"
+        - message: Pull Request Build Status Updated
+        - message_on_error: ''
+        - emoji: ''
+        - emoji_on_error: ''
+        - icon_url: https://bitrise-public-content-production.s3.amazonaws.com/slack/bitrise-slack-icon-128.png
+        - icon_url_on_error: https://bitrise-public-content-production.s3.amazonaws.com/slack/bitrise-slack-error-icon-128.png
+    before_run: 
+    after_run:
+    - linter
+  master-integration:
+    steps:
+    - activate-ssh-key:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone: {}
+    - cache-pull: {}
+    - cocoapods-install: {}
+    - xcode-test:
+        inputs:
+        - scheme: Development
+        - simulator_device: iPhone 6
+        - output_tool: xcodebuild
+        - xcodebuild_test_options: "-enableCodeCoverage YES"
+        - should_build_before_test: 'no'
+    - codecov:
+        inputs:
+        - CODECOV_TOKEN: bccfa85f-ffdf-404d-a793-27a28e4c8c98
+        - other_options: -X xcodeplist -g "Pods/"
+    - deploy-to-bitrise-io:
+        inputs:
+        - notify_user_groups: none
+        - notify_email_list: ''
+    - cache-push:
+        inputs:
+        - cache_paths: "./Pods -> ./Podfile.lock"
+    - slack:
+        inputs:
+        - webhook_url: https://hooks.slack.com/services/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
+        - channel: "#ba-ios-v3"
+        - message: Master Integration Status Updated
+        - message_on_error: Master Integration Status Update Failed
+        - emoji: ''
+        - emoji_on_error: ''
+        - icon_url: https://bitrise-public-content-production.s3.amazonaws.com/slack/bitrise-slack-icon-128.png
+        - icon_url_on_error: https://bitrise-public-content-production.s3.amazonaws.com/slack/bitrise-slack-error-icon-128.png
+    before_run: 
+    after_run: 
+  staging:
+    steps:
+    - slack:
+        inputs:
+        - webhook_url: https://hooks.slack.com/services/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
+        - channel: "#ba-ios-v3"
+        - from_username: Bitrise CI
+        - message: Staging Build Initiated
+        - message_on_error: ''
+        - emoji: ''
+        - emoji_on_error: ''
+        - icon_url: https://bitrise-public-content-production.s3.amazonaws.com/slack/bitrise-slack-icon-128.png
+        - icon_url_on_error: https://bitrise-public-content-production.s3.amazonaws.com/slack/bitrise-slack-error-icon-128.png
+    - activate-ssh-key:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone: {}
+    - fastlane:
+        inputs:
+        - lane: fabric
+    - deploy-to-bitrise-io:
+        inputs:
+        - notify_user_groups: none
+        - notify_email_list: ''
+    - slack:
+        inputs:
+        - webhook_url: https://hooks.slack.com/services/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
+        - channel: "#ba-ios-v3"
+        - message: Staging Build Deployed To Fabric
+        - message_on_error: Staging Build Failed
+        - emoji: ''
+        - emoji_on_error: ''
+        - icon_url: https://bitrise-public-content-production.s3.amazonaws.com/slack/bitrise-slack-icon-128.png
+        - icon_url_on_error: https://bitrise-public-content-production.s3.amazonaws.com/slack/bitrise-slack-error-icon-128.png
+    before_run: 
+    after_run: 
+  production:
+    steps:
+    - slack:
+        inputs:
+        - webhook_url: https://hooks.slack.com/services/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
+        - channel: "#ba-ios-v3"
+        - from_username: Bitrise CI
+        - message: Production Build Initiated
+        - message_on_error: ''
+        - emoji: ''
+        - emoji_on_error: ''
+        - icon_url: https://bitrise-public-content-production.s3.amazonaws.com/slack/bitrise-slack-icon-128.png
+        - icon_url_on_error: https://bitrise-public-content-production.s3.amazonaws.com/slack/bitrise-slack-error-icon-128.png
+    - activate-ssh-key:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone: {}
+    - script:
+        inputs:
+        - content: |-
+            if [ ! -z "$PRODUCTION_PASSWORD" ] ; then
+              envman add --key FASTLANE_PASSWORD --value "$PRODUCTION_PASSWORD"
+            fi
+    - fastlane:
+        inputs:
+        - lane: itunes_connect
+    - deploy-to-bitrise-io:
+        inputs:
+        - notify_user_groups: none
+        - notify_email_list: ''
+    - slack:
+        inputs:
+        - webhook_url: https://hooks.slack.com/services/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
+        - channel: "#ba-ios-v3"
+        - message: Production Build Deployed To iTunes Connect And In Review
+        - message_on_error: Production Build Failed
+        - emoji: ''
+        - emoji_on_error: ''
+        - icon_url: https://bitrise-public-content-production.s3.amazonaws.com/slack/bitrise-slack-icon-128.png
+        - icon_url_on_error: https://bitrise-public-content-production.s3.amazonaws.com/slack/bitrise-slack-error-icon-128.png
+    before_run: 
+    after_run: 
+  linter:
+    steps:
+    - activate-ssh-key:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone: {}
+    - cache-pull: {}
+    - cocoapods-install: {}
+    - swiftlint:
+        inputs:
+        - linting_path: "$BITRISE_SOURCE_DIR"
+    - deploy-to-bitrise-io: {}
+    - cache-push: {}
+    - slack:
+        inputs:
+        - icon_url: https://bitrise-public-content-production.s3.amazonaws.com/slack/bitrise-slack-icon-128.png
+        - icon_url_on_error: https://bitrise-public-content-production.s3.amazonaws.com/slack/bitrise-slack-error-icon-128.png
+        - emoji_on_error: ''
+        - emoji: ''
+        - channel: "#ba-ios-v2"
+        - message: Swiftlint looks good
+        - message_on_error: Swiftlint failed
+        - webhook_url: https://hooks.slack.com/services/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
+    before_run: 
+    after_run: 
+app:
+  envs:
+  - opts:
+      is_expand: false
+    BITRISE_PROJECT_PATH: BaseApp.xcworkspace
+  - opts:
+      is_expand: false
+    BITRISE_SCHEME: Development
+  - opts:
+      is_expand: true
+    FASTLANE_DONT_STORE_PASSWORD: '1'
+trigger_map:
+- push_branch: master
+  workflow: master-integration
+- pull_request_target_branch: "*"
+  workflow: feature
+- tag: v*.*.*
+  workflow: staging

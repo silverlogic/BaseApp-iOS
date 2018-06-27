@@ -1,0 +1,66 @@
+/* 
+  Localizable.strings
+  BaseAppV2
+
+  Created by Emanuel  Guerrero on 3/7/17.
+  Copyright © 2017 SilverLogic. All rights reserved.
+*/
+
+// BaseError
+"BaseError.DefaultErrorDescription" = "Oh no, an unknown error occured. 😞";
+"BaseError.FieldsMissing" = "Oops, not all fields enterd. 😞";
+"BaseError.PasswordsDoNotMatch" = "Oops, passwords entered don't match. 😞";
+"BaseError.EmailNeededForOAuth" = "Please enter an email to continue. 🤔";
+"BaseError.EmailAlreadyInUseForOAuth" = "Oops, the email associated is already in use. 😞";
+"BaseError.EndOfPagination" = "Looks like there aren't anymore. 😜";
+"BaseError.StillLoadingResults" = "Results Are Still Loading. 😜";
+"BaseError.NewEmailConfirmed" = "You need to check your email. 😜";
+"BaseError.FetchResultsError" = "Error fetching objects from store. 😞";
+
+// Settings View Controller
+"SettingsViewController.InviteCode" = "Invite Code";
+"SettingsViewController.Version" = "Version";
+"SettingsViewController.SendFeedback" = "Send Feedback";
+"SettingsViewController.TermsOfUse" = "Terms of Use";
+"SettingsViewController.PrivacyPolicy" = "Privacy Policy";
+"SettingsViewController.ChangePassword" = "Change Password";
+"SettingsViewController.Logout" = "Logout";
+"SettingsViewController.ChangeEmail" = "Change Email";
+"SettingsViewController.ChangeEmailAlert.Message" = "An email will be sent your original email for confirmation. 📥";
+
+// Miscellaneous
+"Miscellaneous.Cancel" = "Cancel";
+"Miscellaneous.Submit" = "Submit";
+"Miscellaneous.EmailMissing" = "Email Missing";
+"Miscellaneous.Email" = "Email";
+"Miscellaneous.Finish" = "Finish";
+"Miscellaneous.NewEmail" = "New Email";
+
+// ImagePicker
+"ImagePicker.NoImages" = "Looks like there aren't any images here. 😜";
+"ImagePicker.RequestPermission.Title" = "Media Access Required";
+"ImagePicker.RequestPermission.Message" = "Please, we need access your photo library. 📷";
+
+// Tutorial
+"Tutorial.PartOne.Title" = "Get Notifed";
+"Tutorial.PartOne.Body" = "Enable push notifications so you can always stay update to date.";
+"Tutorial.PartOne.ButtonText" = "Enable Push Notifications";
+"Tutorial.PartTwo.Title" = "Near You";
+"Tutorial.PartTwo.Body" = "Enable location updates so you can get the best deals near you.";
+"Tutorial.PartTwo.ButtonText" = "Enable Location Updates";
+"Tutorial.PartThree.Title" = "Look For Friends";
+"Tutorial.PartThree.Body" = "Discover new friends everyday here.";
+"Tutorial.PartThree.ButtonText" = "Get Started";
+
+// User
+"User.Unidentified" = "Unidentified";
+"User.Name" = "Name";
+
+// Confirm Email
+"ConfirmEmail.EmailConfirmed" = "Your email is now confirmed. 🎉";
+
+// Mail
+"Mail.Subject" = "%@ | Feedback | %@";
+"Mail.MessageBody" = "Dear %@, <br><br><br>Version: %@<br>User ID: %@<br>Name: %@";
+"Mail.Error.Title" = "Email Disabled";
+"Mail.Error.Message" = "Ooops, looks like you disabled your email in your settings. 😜";

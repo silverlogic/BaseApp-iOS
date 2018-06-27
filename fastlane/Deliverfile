@@ -1,0 +1,18 @@
+###################### More Options ######################
+# If you want to have even more control, check out the documentation
+# https://github.com/fastlane/fastlane/blob/master/deliver/Deliverfile.md
+
+
+###################### Automatically generated ######################
+# Feel free to remove the following line if you use fastlane (which you should)
+username ENV["APPSTORE_DEVELOPER_EMAIL"] # your Apple ID user
+
+team_id ENV["APPSTORE_DEVELOPER_TEAM_ID"]
+
+price_tier 0
+
+automatic_release false
+
+app_icon './fastlane/metadata/AppIcon.png'
+
+app_rating_config_path "./fastlane/metadata/itunes_rating_config.json"

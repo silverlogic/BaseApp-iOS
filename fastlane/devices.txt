@@ -1,0 +1,21 @@
+Device ID	Device Name
+123aa2c25f40ba150331149e385573fa1d25bf36	TSL - CE - iPhone 6
+c8fd7433301f283aa984f14013c3502a40de0e9a	TSL - DH - iPhone 6 Plus
+859a32a327a7dbafc7c105780e959342385388e3	David's AppleWatch
+a9bea64c434983f81c8fd37840cd64dfc824b8b3	TSL - CE - iPad mini 3 - gold
+9142908a579dc2d43de661721288047c0dad2d06	TSL - DH - iPad (3rd Gen)
+500b0af5757cc5f7db8314854af2e28ad4c9592a	TSL - SR - iPhone 4
+9831da392c50e88c9e04f57585f40258da85cfde	TSL - SR - iPhone 6 Plus
+26fe9527d185c6982089c651704ff71f3b2b954c	TSL - SR - iPhone 5
+b75dd4240ebc0173c2c4ed3dd889b61dac1abd6e	TSL - CH - iPhone 6 Plus
+b20f2fdc5b634a7e7058ca04b2cbebcf578f6e91	TSL - CE - iPad mini 3 - black
+3b7b723708d360fc0c1422f8ee4cfbed33e0bb97	Shaun's iPhone
+32770a68cf9cb442b757e1447199d469948c4f2b	TSL - Emanuel - iPhone 6
+0052a65409c5924c73b0acc640a96f65b2bc525d	Gareth Ridout’s iPhone
+9f83fa51a0137dd4979666941d0691d0515906fb	Renan's iPhone
+a4cfadad36335d9a73c0de87658308317ec07b4b	Shaun's iPhone
+0764fb95b78bc5ed706c9da67dc38d25293cbfc7	Vasilii's iPhone
+5bd4fc57ad0d51b4b1451b95ec6e24aa8fb6984c	Rob Doischen’s iPhone
+d0d8cb7998e47bf5aadcaccc1544f5564e2805ca	iPhone de Manu
+9792ac545d586e228a4fec7371e94f60aaad0217	iPad de Manuel
+d1e1adf45ef71b9639a0b82fc701a2112b25673d	Michael Sevy’s iPhone
