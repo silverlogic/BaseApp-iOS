@@ -3,7 +3,15 @@
 </p>
 
 <p align="center">
-    
+    <a href="https://app.bitrise.io/app/650fc8604c9bc611#">
+        <img src="https://app.bitrise.io/app/650fc8604c9bc611/status.svg?token=noq5RkeuISIYlK6590gROg&branch=master" alt="Bitrise Status">
+    </a>
+    <a href="https://codecov.io/gh/silverlogic/BaseApp-iOS">
+        <img src="https://codecov.io/gh/silverlogic/BaseApp-iOS/branch/master/graph/badge.svg" />
+    </a>
+    <a href="https://swift.org/">
+        <img src="https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat" alt="Swift">
+    </a>
 </p>
 
 ----------------
