@@ -90,7 +90,7 @@ platform :ios do
     )
 
     # Get release notes
-    release_notes = sh "cd .. && ./../../Scripts/get_latest_release_notes.sh"
+    release_notes = sh "cd .. && ./Scripts/get_latest_release_notes.sh"
     
     # Upload to Fabric
     crashlytics(
@@ -114,13 +114,16 @@ platform :ios do
     appstore_developer_team_id = ENV["APPSTORE_DEVELOPER_TEAM_ID"]
     appstore_bundle_identifier = ENV["APPSTORE_BUNDLE_IDENTIFIER"]
     appstore_production_branch = ENV["APPSTORE_PRODUCTION_BRANCH"]
+    appstore_company_name = ENV["APPSTORE_COMPANY_NAME"]
+    appstore_itc_id = ENV["APPSTORE_ITC_ID"]
 
     # Create the application on iTunes Connect and Apple Developer Portal
     produce(
       username: appstore_developer_email,
       app_identifier: appstore_bundle_identifier,
       app_name: application_name,
-      team_id: appstore_developer_team_id
+      team_id: appstore_developer_team_id,
+      com_id: appstore_developer_team_id
     )
 
     # Load provisioning profiles and certificates
@@ -159,7 +162,7 @@ platform :ios do
     deliver(
       username: appstore_developer_email,
       app_identifier: appstore_bundle_identifier,
-      team_id: appstore_developer_team_id,
+      team_id: appstore_itc_id,
       submit_for_review: false
     )
   end
@@ -222,13 +225,15 @@ platform :ios do
     appstore_developer_team_id = ENV["APPSTORE_DEVELOPER_TEAM_ID"]
     appstore_bundle_identifier = ENV["APPSTORE_BUNDLE_IDENTIFIER"]
     appstore_production_branch = ENV["APPSTORE_PRODUCTION_BRANCH"]
+    appstore_company_name = ENV["APPSTORE_COMPANY_NAME"]
 
     # Create the application on iTunes Connect and Apple Developer Portal
     produce(
       username: appstore_developer_email,
       app_identifier: appstore_bundle_identifier,
       app_name: application_name,
-      team_id: appstore_developer_team_id
+      team_id: appstore_developer_team_id,
+      company_name: appstore_company_name
     )
 
     # Generate provisioning profiles and certificates

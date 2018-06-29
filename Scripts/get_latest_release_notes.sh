@@ -1,5 +1,6 @@
 #!/bin/bash
-#Bash script for getting the release notes for the latest release.
+
+# Bash script for getting the release notes for the latest release.
 
 set -e
 

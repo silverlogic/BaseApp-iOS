@@ -15,6 +15,10 @@ define reset_xcoodeproj
 	@git checkout BaseApp.xcodeproj/project.pbxproj
 endef
 
+define list_itc_teams
+	./Scripts/list_itc_teams.rb $(USERNAME) $(PASSWORD)
+endef
+
 # Target Rules
 .PHONY: help
 
@@ -35,6 +39,11 @@ ifndef PASSWORD
 	$(error "Password for Fastlane not set. Password is required to continue")
 endif
 
+check_username:
+ifndef USERNAME
+	$(error "Username for Fastlane not set. Username is required to continue")
+endif
+
 new_appstore_profile:
 	@echo "Creating new provision profile and certificate for app store"
 	$(call invoke_lane, generate_appstore_profile)
@@ -50,6 +59,10 @@ release_production:
 release_staging:
 	@echo "Deploying to Fabric"
 	$(call invoke_lane, fabric)
+
+list_all_itc_teams:
+	@echo "Listing available iTunes Connect Teams"
+	$(call list_itc_teams)
 
 clean: 
 	@rm -rf ~/Library/Caches/CocoaPods
@@ -90,3 +103,4 @@ deploy_clean_staging: check_password install_fastlane new_fabric_profile release
 
 open_clean_xcode: clean open_xcode ## Cleans the project, installs the required dependencies and opens the project in Xcode
 
+list_available_itc_teams: check_username check_password install_fastlane list_all_itc_teams ### Lists the available iTunes Connect teams that our developer account has access to
