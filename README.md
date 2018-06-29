@@ -120,7 +120,7 @@ $ brew install swiftlint
 ### Setup
 After installing SwiftLint, use the following command to clone the repo:
 ```
-$ git clone git@bitbucket.org:silverlogic/baseapp-ios-v2.git
+$ git clone git@github.com:silverlogic/BaseApp-iOS.git
 ```
 Then run the following command to install the dependencies, and open the project in Xcode:
 ```
